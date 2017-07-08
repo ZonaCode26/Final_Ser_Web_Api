@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Negocios2017Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tb_clientes">
+    <Key>
+      <PropertyRef Name="IdCliente" />
+    </Key>
+    <Property Name="IdCliente" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NombreCia" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Direccion" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="idpais" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+    <Property Name="Telefono" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="tb_paises" Relationship="Self.FK__tb_client__idpai__276EDEB3" FromRole="tb_clientes" ToRole="tb_paises" />
+  </EntityType>
+  <EntityType Name="tb_paises">
+    <Key>
+      <PropertyRef Name="Idpais" />
+    </Key>
+    <Property Name="Idpais" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="NombrePais" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="tb_clientes" Relationship="Self.FK__tb_client__idpai__276EDEB3" FromRole="tb_paises" ToRole="tb_clientes" />
+  </EntityType>
+  <Association Name="FK__tb_client__idpai__276EDEB3">
+    <End Role="tb_paises" Type="Self.tb_paises" Multiplicity="0..1" />
+    <End Role="tb_clientes" Type="Self.tb_clientes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tb_paises">
+        <PropertyRef Name="Idpais" />
+      </Principal>
+      <Dependent Role="tb_clientes">
+        <PropertyRef Name="idpais" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Negocios2017Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tb_clientes" EntityType="Self.tb_clientes" />
+    <EntitySet Name="tb_paises" EntityType="Self.tb_paises" />
+    <AssociationSet Name="FK__tb_client__idpai__276EDEB3" Association="Self.FK__tb_client__idpai__276EDEB3">
+      <End Role="tb_paises" EntitySet="tb_paises" />
+      <End Role="tb_clientes" EntitySet="tb_clientes" />
+    </AssociationSet>
+    <FunctionImport Name="USP_ACTUALIZARCLIENTEF">
+      <Parameter Name="id" Mode="In" Type="String" />
+      <Parameter Name="nom" Mode="In" Type="String" />
+      <Parameter Name="dir" Mode="In" Type="String" />
+      <Parameter Name="idp" Mode="In" Type="String" />
+      <Parameter Name="tel" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="USP_AGREGARCLIENTEF">
+      <Parameter Name="id" Mode="In" Type="String" />
+      <Parameter Name="nom" Mode="In" Type="String" />
+      <Parameter Name="dir" Mode="In" Type="String" />
+      <Parameter Name="idp" Mode="In" Type="String" />
+      <Parameter Name="tel" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="USP_ELIMINARF">
+      <Parameter Name="id" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="USP_LISTACLIENTEF" ReturnType="Collection(Negocios2017Model.USP_LISTACLIENTEF_Result)" />
+    <FunctionImport Name="USP_LISTAPAISESF" ReturnType="Collection(Negocios2017Model.USP_LISTAPAISESF_Result)" />
+  </EntityContainer>
+  <ComplexType Name="USP_LISTACLIENTEF_Result">
+    <Property Type="String" Name="idcliente" Nullable="false" MaxLength="5" />
+    <Property Type="String" Name="nombrecia" Nullable="false" MaxLength="40" />
+    <Property Type="String" Name="direccion" Nullable="false" MaxLength="60" />
+    <Property Type="String" Name="nombrepais" Nullable="false" MaxLength="40" />
+    <Property Type="String" Name="telefono" Nullable="false" MaxLength="24" />
+  </ComplexType>
+  <ComplexType Name="USP_LISTAPAISESF_Result">
+    <Property Type="String" Name="Idpais" Nullable="false" MaxLength="3" />
+    <Property Type="String" Name="NombrePais" Nullable="false" MaxLength="40" />
+  </ComplexType>
+</Schema>
